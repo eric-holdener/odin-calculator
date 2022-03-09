@@ -17,18 +17,54 @@ function divide(a, b) {
 function operate(keys) {
     const keysTranslation = keys.split("");
     console.log(keysTranslation);
+    let i = 0;
+    keysTranslation.forEach((key, index) => {
+        if (key === "+" || key === "-" || key === "/" || key === "*") {
+            i++;
+            let operator = key;
+            let a = "";
+            let b = "";
+            if (i == 1) {
+                a = keysTranslation.slice(0, index);
+                a = a.join('');
+                a = parseFloat(a);
+
+                findNextNumber = keysTranslation.slice(index+1);
+                findNextNumber.forEach((key, index) => {
+                    if (key === "+" || key === "-" || key === "/" || key === "*") {
+                        b = findNextNumber.slice(0, index);
+                        b = b.join('');
+                        b = parseFloat(b);
+                        return b;
+                    } else {
+                        b = findNextNumber;
+                        b = b.join('');
+                        b = parseFloat(b);
+                        return b;
+                    }
+                });
+            }
+
+
+            switch (operator) {
+                case '+':
+                    console.log(add(a, b));
+                    break;
+                case '-':
+                    console.log(subtract(a, b));
+                    break;
+                case '*':
+                    console.log(multiply(a, b));
+                    break;
+                case '/':
+                    console.log(divide(a, b));
+                    break;
+            }
+        }
+    });
 
     // keysTranslation.forEach(key => )
-    // switch (operator) {
-    //     case '+':
-    //         add(a, b);
-    //     case '-':
-    //         subtract(a, b);
-    //     case '*':
-    //         multiply(a, b);
-    //     case '/':
-    //         divide(a, b);
-    // }
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
