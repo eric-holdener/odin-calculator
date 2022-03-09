@@ -45,6 +45,8 @@ function operate(keys) {
                 });
             }
 
+            // add multiple lines logic here
+
 
             switch (operator) {
                 case '+':
@@ -62,9 +64,6 @@ function operate(keys) {
             }
         }
     });
-
-    // keysTranslation.forEach(key => )
-
 }
 
 document.addEventListener("DOMContentLoaded", () => {
