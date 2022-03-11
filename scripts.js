@@ -52,6 +52,7 @@ function stringParsing(keys) {
                 b = parseFloat(b);
     
                 intermediateCalculator = (operate(keysStore[i]["key"], a, b));
+                displayFinal(intermediateCalculator);
             } else {
                 a = intermediateCalculator;
     
@@ -64,13 +65,14 @@ function stringParsing(keys) {
     } 
     // logic for single operator functions
     else {
-        a = keysTranslation.slice(0, keysStore[i]["index"]).join('');
+        a = keysTranslation.slice(0, keysStore[0]["index"]).join('');
         a = parseFloat(a);
     
-        b = keysTranslation.slice(keysStore[i]["index"]+1, keysStore[i+1]["index"]).join('');
+        b = keysTranslation.slice(keysStore[0]["index"]+1).join('');
         b = parseFloat(b);
     
-        intermediateCalculator = operate(keysStore[i]["key"], a, b);
+        intermediateCalculator = operate(keysStore[0]["key"], a, b);
+        displayFinal(intermediateCalculator);
     }
 }
 
@@ -114,7 +116,7 @@ let keys = "";
 function collector(key) {
     const display = document.querySelector(".display");
     let displayNumber = document.createElement("p");
-    displayNumber.className = ".display-number";
+    displayNumber.className = "display-number";
     if (display.hasChildNodes) {
         while (display.firstChild) {
             display.removeChild(display.firstChild);
@@ -138,4 +140,18 @@ function collector(key) {
         displayNumber.textContent = keys;
         display.appendChild(displayNumber);
     }
+}
+
+function displayFinal(number) {
+    const display = document.querySelector(".display");
+    let displayNumber = document.createElement("p");
+    displayNumber.className = "display-number";
+    if (display.hasChildNodes) {
+        while (display.firstChild) {
+            display.removeChild(display.firstChild);
+        }
+    }
+
+    displayNumber.textContent = number;
+    display.appendChild(displayNumber);
 }
