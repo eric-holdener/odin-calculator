@@ -14,56 +14,69 @@ function divide(a, b) {
     return (a/b);
 }
 
-function operate(keys) {
+function stringParsing(keys) {
     const keysTranslation = keys.split("");
-    console.log(keysTranslation);
-    let i = 0;
+
+    let keyIndex = {};
+    let keysStore = [];
+
+    let intermediateCalculator = 0;
+
     keysTranslation.forEach((key, index) => {
         if (key === "+" || key === "-" || key === "/" || key === "*") {
-            i++;
-            let operator = key;
-            let a = "";
-            let b = "";
-            if (i == 1) {
-                a = keysTranslation.slice(0, index);
-                a = a.join('');
-                a = parseFloat(a);
-
-                findNextNumber = keysTranslation.slice(index+1);
-                findNextNumber.forEach((key, index) => {
-                    if (key === "+" || key === "-" || key === "/" || key === "*") {
-                        b = findNextNumber.slice(0, index);
-                        b = b.join('');
-                        b = parseFloat(b);
-                        return b;
-                    } else {
-                        b = findNextNumber;
-                        b = b.join('');
-                        b = parseFloat(b);
-                        return b;
-                    }
-                });
-            }
-
-            // add multiple lines logic here
-
-
-            switch (operator) {
-                case '+':
-                    console.log(add(a, b));
-                    break;
-                case '-':
-                    console.log(subtract(a, b));
-                    break;
-                case '*':
-                    console.log(multiply(a, b));
-                    break;
-                case '/':
-                    console.log(divide(a, b));
-                    break;
-            }
+            keyIndex = {key, index};
+            keysStore.push(keyIndex);
         }
     });
+
+    for (let i = 0; i < keysStore.length; i++){
+        if (i == 0) {
+            a = keysTranslation.slice(0, keysStore[i]["index"]).join('');
+            a = parseFloat(a);
+
+            b = keysTranslation.slice(keysStore[i]["index"]+1, keysStore[i+1]["index"]).join('');
+            b = parseFloat(b);
+
+            intermediateCalculator = operate(keysStore[i]["key"], a, b);
+        } else if (i == keysStore.length-1) {
+            a = intermediateCalculator;
+
+            b = keysTranslation.slice(keysStore[i]["index"]+1).join('');
+            b = parseFloat(b);
+
+            intermediateCalculator = (operate(keysStore[i]["key"], a, b));
+        } else {
+            a = intermediateCalculator;
+
+            b = keysTranslation.slice(keysStore[i]["index"]+1, keysStore[i+1]["index"]).join('');
+            b = parseFloat(b);
+
+            intermediateCalculator = operate(keysStore[i]["key"], a, b);
+        }
+    }
+}
+
+function operate(operator, a, b) {
+    console.log("in operate");
+    let value = 0;
+    switch (operator) {
+        case '+':
+            value = add(a, b);
+            console.log(value);
+            return value;
+        case '-':
+            value = subtract(a, b);
+            console.log(value);
+            return value;
+        case '*':
+            value = multiply(a, b);
+            console.log(value);
+            return value;
+        case '/':
+            value = divide(a, b);
+            console.log(value);
+            return value;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -90,7 +103,7 @@ function collector(key) {
     if (key === "=") {
         passKeys = keys;
         keys = "";
-        operate(passKeys);
+        stringParsing(passKeys);
     } else if (key === "clear") {
         keys = "";
         displayNumber.textContent = keys;
